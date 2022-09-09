@@ -31,14 +31,14 @@ const BlogSchema = new mongoose.Schema( {
     "subcategory": [{
         type: String
     }],       
-    "deletedAt": "", // if deleted is true deletedAt will have a date 2021-09-17T04:25:07.803Z,
-    // ["Non fiction", "Self Help"],
+    "deletedAt": "", 
+
     "isdeleted": {
         type: Boolean,
         default: false
     },
-    "publishedAt": "", // if published is true publishedAt will have a date 2021-09-17T04:25:07.803Z
-
+    "publishedAt": "", 
+    
     "isPublished": {
         type: Boolean,
         default: false

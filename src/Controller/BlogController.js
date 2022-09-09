@@ -155,25 +155,29 @@ const deletedocs = async function (req, res) {
     let tokensId = req.decodedToken.userId;
     
     if (Object.keys(query) == 0) {
-      return res.status(404).send({ status: false, msg: "Provide a valid input" });
-    }
-    if (!query.authorId) {
-      return res.status(404).send({ status: false, msg: "autherId is required" });
-      
+      return res.status(404).send({ status: false, msg: "input is required" });
     }
 
+    
+    let blogDetails = await blogModel.findOne(data)
+    
+    if ( !blogDetails ) {
+      return res
+      .status(400)
+      .send({ status: false, message: `Blog not exist`});
+    }
+    if ( blogDetails.authorId.toString() !== tokensId) {
+      return res
+      .status(401)
+      .send({ status: false, message: `Unauthorized access` });
+    }
+    
     let deleteBlogs = await blogModel.updateMany(data, {
       $set: { isdeleted: true  },
     });
 
     if (deleteBlogs["matchedCount"] === 0) {
       return res.status(404).send({ status: false, msg: "Blog not exist" });
-    }
-
-    if (query.authorId.toString() !== tokensId) {
-      return res
-        .status(401)
-        .send({ status: false, message: `Unauthorized access` });
     }
 
     res.send();
