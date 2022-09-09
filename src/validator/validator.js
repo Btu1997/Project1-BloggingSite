@@ -14,7 +14,7 @@ const isValidTitle = function(title){
 }
 
 const isValidPassword = function(Password){
-    const passRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+    const passRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$/
     return passRegex.test(Password) 
 }
 
