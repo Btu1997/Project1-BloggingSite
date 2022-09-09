@@ -3,27 +3,12 @@ const blogModel = require("../Models/blogModel");
 const mongoose = require("mongoose");
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
-const { isValidName , isValidTag, isValidAuthorId, } = require("../validator/validator");
+
 
 const createBlog = async function (req, res) {
   try {
     let data = req.body;
     let CurrentDate = moment().format("DD MM YYYY hh:mm:ss");
-    let [title, body, authorId, tags, category] = [ data.title, data.body, data.authorId, data.tags, data.category, ];
-
-    if (!title || !body || !authorId || !tags || !category) {
-      return res
-        .status(400)
-        .send({ status: false, msg: "Please give all required input" });
-    }
-
-    let [Title, Body, AuthorId, Tags, Category] = [ isValidName(title), isValidName(body), isValidAuthorId(authorId), isValidTag(tags), isValidName(category),];
-
-    if (!Title || !Body || !AuthorId || !Tags || !Category) {
-      return res
-        .status(400)
-        .send({ status: false, message: "Enter a valid input" });
-    }
 
     let authorDetails = await authourModel.findById(data["authorId"]);
 
@@ -71,13 +56,13 @@ const getBlogs = async function (req, res) {
   }
 };
 
-
 const updateBlogs = async function (req, res) {
   try {
     let blogId = req.params.blogId;
-    let data = req.body;
+    let dataForUpdate = req.body;
     let tokensId = req.decodedToken.userId;
-    let [title, body, tag, subcategories] = [ data["title"], data["body"], data["tags"], data["subcategory"] ];
+    let {title, body, tags, subcategory} = {...dataForUpdate}
+
     let CurrentDate = moment().format("DD MM YYYY hh:mm:ss");
 
     if (!mongoose.isValidObjectId(blogId)) {
@@ -86,14 +71,16 @@ const updateBlogs = async function (req, res) {
         .send({ status: false, error: "blogId is invalid" });
     }
 
-    if (Object.keys(data) == 0) {
+    if (Object.keys(dataForUpdate) == 0) {
+
       return res.status(404).send({ status: false, msg: "Provide a input to update" });
     }
 
     let updateBlog = await blogModel.findOneAndUpdate(
       { _id: blogId, isPublished: false },
       {
-        $push: { tags: tag, subcategory: subcategories },
+        $push: { tags: tags, subcategory: subcategory },
+
         $set: {
           title: title,
           body: body,
@@ -121,6 +108,8 @@ const updateBlogs = async function (req, res) {
     res.status(500).send({ status: false, error: error.message });
   }
 };
+
+
 
 
 const deleteBlog = async function (req, res) {
@@ -194,6 +183,7 @@ const deletedocs = async function (req, res) {
 };
 
 
+
 const loginUser = async function (req, res) {
   try {
     let emailId = req.body.email;
@@ -228,4 +218,7 @@ const loginUser = async function (req, res) {
   }
 };
 
+
+
 module.exports = { createBlog, getBlogs, updateBlogs, deleteBlog, deletedocs, loginUser, };
+
