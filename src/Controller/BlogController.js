@@ -162,7 +162,7 @@ const deleteBlog = async function (req, res) {
 const deletedocs = async function (req, res) {
   try {
     let query = req.query;
-    let data = {isPublished: true, ...query}
+    let data = {isPublished: true, isdeleted: false, ...query}
     let tokensId = req.decodedToken.userId;
     
     if (Object.keys(query) == 0) {

@@ -1,10 +1,5 @@
 const mongoose = require("mongoose")
 
-// const isValidName = function(name) {
-//     const nameRegex = /^[a-zA-Z]{2,30}$/
-//     return nameRegex.test(name)
-// }
-
 const isValidName = function(body) {
     const nameRegex = /^[a-zA-Z0-9_ ]*$/
     return nameRegex.test(body)
@@ -31,14 +26,5 @@ const isValidEmail = function(email){
         return /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(email);
 
 }
-
-// validate: {
-//     validator: function (v) {
-//         return /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(v);
-//     }
-
-//     message: "Please enter a valid email"
-
-// }
 
 module.exports={isValidName, isValidTitle, isValidEmail, isValidPassword , isValidTag , isValidAuthorId };
