@@ -75,6 +75,13 @@ const updateBlogs = async function (req, res) {
 
       return res.status(404).send({ status: false, msg: "Provide a input to update" });
     }
+    let blog = await blogModel.findOne({_id : blogId})
+    
+    if (blog.authorId.toString() !== tokensId) {
+      return res
+        .status(401)
+        .send({ status: false, message: `Unauthorized access` });
+    }
 
     let updateBlog = await blogModel.findOneAndUpdate(
       { _id: blogId, isPublished: false },
@@ -97,11 +104,6 @@ const updateBlogs = async function (req, res) {
         .send({ status: false, msg: "Blog does not exist." });
     }
 
-    if (updateBlog.authorId.toString() !== tokensId) {
-      return res
-        .status(401)
-        .send({ status: false, message: `Unauthorized access` });
-    }
 
     res.status(200).send({ status: true, data: updateBlog });
   } catch (error) {
@@ -180,7 +182,7 @@ const deletedocs = async function (req, res) {
       return res.status(404).send({ status: false, msg: "Blog not exist" });
     }
 
-    res.send();
+    res.send({ status: false, msg: "Blog deleted successfully" });
   } catch (error) {
     res.status(500).send({ status: false, error: error.message });
   }
