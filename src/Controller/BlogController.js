@@ -226,5 +226,5 @@ const loginUser = async function (req, res) {
 
 
 
-module.exports = { createBlog, getBlogs, updateBlogs, deleteBlog, deletedocs, loginUser, };
+module.exports = { createBlog, getBlogs, updateBlogs, deleteBlog, deletedocs, loginUser,};
 
