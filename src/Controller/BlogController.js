@@ -84,7 +84,7 @@ const updateBlogs = async function (req, res) {
     }
 
     let updateBlog = await blogModel.findOneAndUpdate(
-      { _id: blogId, isPublished: false },
+      { _id: blogId, isPublished: false, isdeleted: false },
       {
         $push: { tags: tags, subcategory: subcategory },
 
@@ -98,7 +98,7 @@ const updateBlogs = async function (req, res) {
       { new: true }
     );
 
-    if (!updateBlog || updateBlog["isdeleted"] === true) {
+    if (!updateBlog ) {
       return res
         .status(404)
         .send({ status: false, msg: "Blog does not exist." });
@@ -182,7 +182,7 @@ const deletedocs = async function (req, res) {
       return res.status(404).send({ status: false, msg: "Blog not exist" });
     }
 
-    res.send({ status: false, msg: "Blog deleted successfully" });
+    res.status(200).send({ status: false, msg: "Blog deleted successfully" });
   } catch (error) {
     res.status(500).send({ status: false, error: error.message });
   }
